@@ -17,7 +17,8 @@ catch(Exception e)
 
 
 /*
-Problem #1: Find the longest substring
+Problem #1: Find the longest substring 
+https://leetcode.com/problems/longest-substring-without-repeating-characters/description/
 Given a string s, find the length of the longest substring without 
 duplicate characters.
 */

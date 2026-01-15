@@ -58,6 +58,7 @@ static int[] TwoSum(int[] nums, int target)
 /*Problem #2: Median of two sorted Arrays (https://leetcode.com/problems/median-of-two-sorted-arrays/)
 Given two sorted arrays nums1 and nums2 of size m and n respectively, return 
 the median of the two sorted arrays.
+Solution in O(m+n)
 */
 static double FindMedianSortedArrays(int[] numsA, int[] numsB)
 {

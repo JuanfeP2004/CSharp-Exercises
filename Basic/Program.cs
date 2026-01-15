@@ -9,6 +9,11 @@ try
     string s = "pwwkew";
     int substring = LengthOfLongestSubstring(s);
     Console.WriteLine($"The longest substring is {substring} caracters long");
+
+    Console.WriteLine("Problem #2: Find the longest palindromic substring");
+    string t = "cbbd";
+    string substring_2 = LongestPalindrome(t);
+    Console.WriteLine($"The longest palindromic substring is {substring_2}");
 }
 catch(Exception e)
 {
@@ -72,4 +77,41 @@ int LengthOfLongestSubstring(string s)
     }
 
     return longest;
+}
+
+/*
+    Problem #2: Lenght of the longest palindromic string
+    (https://leetcode.com/problems/longest-palindromic-substring/)
+    Given a string s, return the longest palindromic substring in s.
+*/
+string LongestPalindrome(string s)
+{
+    if(s.Length < 1 || s.Length > 1000)
+        throw new Exception("string is too long or too short");
+    if(s.Length == 1)
+        return s;
+
+    string sub = "";
+    string reverse = "";
+    string return_s = Char.ToString(s[0]); 
+
+    for (int i = 2; i <= s.Length; i++)
+    {
+        for(int j = 0; j < s.Length - i + 1; j++)
+        {          
+            sub = s.Substring(j, i);
+            reverse = "";
+            for(int k = sub.Length-1; k>=0; k--)
+            {
+                reverse += sub[k];
+            }
+
+            if (sub.Equals(reverse) && sub.Length > return_s.Length)
+            {
+                return_s = sub;
+            }
+        }
+    }
+
+    return return_s;
 }

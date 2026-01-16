@@ -19,8 +19,13 @@ try
 
     Console.WriteLine("Problem #3: Zigzag conversion");
     string example3 = "PAYPAL";
-    string result3 = Convert(example3, 3);
+    string result3 = ZigzagConvert(example3, 3);
     Console.WriteLine($"The zigzag string is read: {result3}");
+
+    Console.WriteLine("Problem #4: Integer reversion");
+    int example4 = 120;
+    int result4 = ReverseInteger(example4);
+    Console.WriteLine($"The reverse is: {result4}");
 }
 catch(Exception e)
 {
@@ -29,10 +34,10 @@ catch(Exception e)
 
 
 /*
-Problem #1: Find the longest substring 
-https://leetcode.com/problems/longest-substring-without-repeating-characters/description/
-Given a string s, find the length of the longest substring without 
-duplicate characters.
+    Problem #1: Find the longest substring 
+    (https://leetcode.com/problems/longest-substring-without-repeating-characters/description/)
+    Given a string s, find the length of the longest substring without 
+    duplicate characters.
 */
 
 int LengthOfLongestSubstring(string s)
@@ -127,7 +132,7 @@ string LongestPalindrome(string s)
     Problem #3: Zigzag conversion
     (https://leetcode.com/problems/zigzag-conversion/description/)
 */
-string Convert(string s, int numRows) {
+string ZigzagConvert(string s, int numRows) {
     
     if(s.Length < 1 || s.Length > 1000)
         throw new Exception("String is too long or too short");
@@ -192,4 +197,42 @@ string Convert(string s, int numRows) {
     }
 
     return zigzagString;
+}
+
+/*
+    Problem #4: Reverse integer
+    (https://leetcode.com/problems/reverse-integer/)
+    Given a signed 32-bit integer x, return x with its digits reversed. 
+    If reversing x causes the value to go outside the signed 32-bit integer 
+    range [-231, 231 - 1], then return 0
+*/
+int ReverseInteger(int x)
+{
+    string integer = x.ToString();
+
+    bool firstDigit = false;
+    bool negative = false;
+    string result = "";
+
+    if(x < 0)
+    {
+        negative = true;
+        integer = integer.Split('-')[1];
+    }
+
+    for(int i = integer.Length - 1; i >= 0; i--)
+    {
+        if(integer[i] == '0' && !firstDigit)
+            continue;
+        else
+        {
+            if(!firstDigit) firstDigit = true;
+            result += integer[i];
+        }       
+    }
+
+    if (negative)
+        return int.Parse($"-{result}");
+    else
+        return int.Parse(result);
 }

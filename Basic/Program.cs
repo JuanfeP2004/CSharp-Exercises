@@ -31,6 +31,11 @@ try
     string example5 = "   +45b6";
     int result5 = MyAtoi(example5);
     Console.WriteLine($"The integer is: {result5}");
+
+    Console.WriteLine("Problem #6: Palindromic Number");
+    int example6 = 123454321;
+    bool result6 = IsPalindromic(example6);
+    Console.WriteLine($"The number is palindromic: {result6}");
 }
 catch(Exception e)
 {
@@ -242,7 +247,7 @@ int ReverseInteger(int x)
 }
 
 /*
-    Problem #5: Atoi
+    Problem #5: Own Atoi
     (https://leetcode.com/problems/string-to-integer-atoi/)
     Implement the myAtoi(string s) function, which converts a string to a 
     32-bit signed integer.
@@ -307,4 +312,23 @@ int MyAtoi(string s)
         return -integer;
     else
         return integer;
+}
+
+/*
+    Problem #6: Palindromic Number
+    (https://leetcode.com/problems/palindrome-number/)
+    Given an integer x, return true if x is a palindrome, and false otherwise.
+*/
+bool IsPalindromic(int x)
+{
+    if (x > int.MaxValue || x < int.MinValue)
+        throw new Exception("Number is too short or too long");
+
+    if(x < 0)
+        return false;
+    
+    char[] number = x.ToString().ToCharArray();
+    Array.Reverse(number);
+    int reverse = Int32.Parse(new string(number));
+    return x == reverse;    
 }

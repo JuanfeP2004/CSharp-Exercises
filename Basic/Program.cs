@@ -23,9 +23,14 @@ try
     Console.WriteLine($"The zigzag string is read: {result3}");
 
     Console.WriteLine("Problem #4: Integer reversion");
-    int example4 = 120;
+    int example4 = 124;
     int result4 = ReverseInteger(example4);
     Console.WriteLine($"The reverse is: {result4}");
+
+    Console.WriteLine("Problem #5: Atoi");
+    string example5 = "   +45b6";
+    int result5 = MyAtoi(example5);
+    Console.WriteLine($"The integer is: {result5}");
 }
 catch(Exception e)
 {
@@ -39,7 +44,6 @@ catch(Exception e)
     Given a string s, find the length of the longest substring without 
     duplicate characters.
 */
-
 int LengthOfLongestSubstring(string s)
 {
     if(s.Length < 0 || s.Length > 10000)
@@ -235,4 +239,72 @@ int ReverseInteger(int x)
         return int.Parse($"-{result}");
     else
         return int.Parse(result);
+}
+
+/*
+    Problem #5: Atoi
+    (https://leetcode.com/problems/string-to-integer-atoi/)
+    Implement the myAtoi(string s) function, which converts a string to a 
+    32-bit signed integer.
+*/
+int MyAtoi(string s)
+{
+    if(s.Length < 1 || s.Length > 1000)
+        throw new Exception("The string is too short or too long");
+
+    bool firstDigit = false;
+    bool negative = false;
+    bool leadingZero = false;
+    int digits = 0;
+    int offset = 0;
+
+    for (int i = 0; i < s.Length; i++)
+    {
+        //WhiteSpace
+        if(s[i] == ' ')
+            offset++;
+        //No integer
+        else if(!firstDigit && s[i] != '-' && s[i] != '+' && (s[i] < 48 || s[i] > 57))
+            return 0;
+        //Negative
+        else if(!firstDigit && s[i] == '-' && !leadingZero) {
+            negative = true;
+            offset++;
+        }
+        //Positive
+        else if (!firstDigit && s[i] == '+' && !leadingZero)
+            offset++;
+        //Letter before first digit
+        else if((s[i] < 48 || s[i] > 57) && !firstDigit)
+            return 0;
+        //Finds a letter
+        else if (s[i] < 48 || s[i] > 57)
+            break;
+        //Leading 0
+        else if(s[i] == '0' && !firstDigit) {
+            leadingZero = true;
+            offset++;
+        }
+        //First digit
+        else if(s[i] >= 49 && s[i] <= 57 && !firstDigit)
+        {
+            firstDigit = true;
+            digits++;
+        }
+        //Increment
+        else if(s[i] >= 48 && s[i] <= 57)
+            digits++;  
+    }
+
+    int integer = 0;
+    for (int i = 0; i < digits; i++)
+    {
+        integer += (s[offset + i]-48) * (int)Math.Pow(10, digits - i - 1);
+    }
+    //The language controls the overflow :) 
+
+    if(negative)
+        return -integer;
+    else
+        return integer;
 }

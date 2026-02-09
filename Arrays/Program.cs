@@ -1,7 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Drawing;
-
 try
 {    
     Console.WriteLine("Arrays problems");
@@ -18,13 +16,19 @@ try
     int[] sortedB = [3,4];
     double median = FindMedianSortedArrays(sortedA, sortedB);
     Console.WriteLine($"The median of the merged Array is: {median}");
+
+    Console.WriteLine("Problem #3");
+    int[] example3 = [1,1];
+    int result3 = MaxArea(example3);
+    Console.WriteLine($"The max area of the heights is: {result3}");
 }
 catch(Exception e)
 {
     Console.WriteLine(e.Message);
 }
 
-/*Problem #1: Two Sum (https://leetcode.com/problems/two-sum/description/)
+/*Problem #1: Two Sum 
+(https://leetcode.com/problems/two-sum/description/)
 Given an array of integers nums and an integer target, return indices of 
 the two numbers such that they add up to target.
 You may assume that each input would have exactly one solution, and you may not use the same element twice.
@@ -55,7 +59,8 @@ static int[] TwoSum(int[] nums, int target)
     throw new Exception("Couldn't find any pair");
 }
 
-/*Problem #2: Median of two sorted Arrays (https://leetcode.com/problems/median-of-two-sorted-arrays/)
+/*Problem #2: Median of two sorted Arrays 
+(https://leetcode.com/problems/median-of-two-sorted-arrays/)
 Given two sorted arrays nums1 and nums2 of size m and n respectively, return 
 the median of the two sorted arrays.
 Solution in O(m+n)
@@ -108,4 +113,39 @@ static double FindMedianSortedArrays(int[] numsA, int[] numsB)
         int position = finalLength/2;
         return sortedArray[position];
     }
+}
+
+/*Problem #3: Max area of two heights
+(https://leetcode.com/problems/container-with-most-water/)
+You are given an integer array height of length n. There are n vertical lines 
+drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
+
+Find two lines that together with the x-axis form a container, such that the container contains the most water.
+
+Return the maximum amount of water a container can store.
+
+Notice that you may not slant the container.
+*/
+static int MaxArea(int[] heights)
+{
+    if(heights.Length < 2 || heights.Length > Math.Pow(10,5))
+        throw new Exception("Heights array is too short or too long");
+    foreach (int i in heights)
+        if(i < 0 || i > Math.Pow(10,4))
+            throw new Exception("An element of the heights array is too short or too long");
+
+    int maxArea = 0;
+    int area = 0;
+
+    for (int i = 0; i < heights.Length; i++)
+    {       
+        for (int j = i+1; j < heights.Length; j++)
+        {
+            area = (j-i)*int.Min(heights[i], heights[j]);
+            if(area >= maxArea)
+                maxArea = area;
+        }
+    }
+
+    return maxArea;
 }

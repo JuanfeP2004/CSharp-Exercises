@@ -36,6 +36,12 @@ try
     int example6 = 123454321;
     bool result6 = IsPalindromic(example6);
     Console.WriteLine($"The number is palindromic: {result6}");
+
+    Console.WriteLine("Problem #7: Regular Expression");
+    string example7_1 = "a";
+    string exampel7_2 = "a*a";
+    bool result7 = IsMatch(example7_1, exampel7_2);
+    Console.WriteLine($"The expresion is {result7}");
 }
 catch(Exception e)
 {
@@ -332,3 +338,172 @@ bool IsPalindromic(int x)
     int reverse = Int32.Parse(new string(number));
     return x == reverse;    
 }
+
+/*
+    Problem #7: Regular expression
+    (https://leetcode.com/problems/regular-expression-matching/)
+    Given an input string s and a pattern p, implement regular expression 
+    matching with support for '.' and '*' where:
+    '.' Matches any single character.​​​​
+    '*' Matches zero or more of the preceding element.
+    The matching should cover the entire input string (not partial).
+*/
+bool IsMatch(string s, string p)
+{
+    if(s.Length < 1 || s.Length > 20)
+        throw new Exception("String is too long or too short");
+    if(p.Length < 1 || p.Length > 20)
+        throw new Exception("Pattern is too long or too short");
+    if(p[0] == '*')
+        throw new Exception("No valid pattern");
+
+    //First step: retrieve the tokens
+    List<string> tokens = new List<string>();
+    for(int i = 0; i < p.Length; i++)
+    {
+        if(i == p.Length - 1 && p[i] != '*')
+        {
+            tokens.Add($"{p[i]}");
+        }
+        else if(p[i] == '*')
+            throw new Exception("No valid Pattern");
+        else
+        {
+            if(p[i+1] == '*')
+            {
+                tokens.Add($"{p[i]}*");
+                i++;
+            }
+            else
+                tokens.Add($"{p[i]}");
+        }
+    }
+
+    //Second step: view if the expression match
+    return MatchToken(tokens, 0, 0, s);
+}
+
+bool MatchToken(List<string> tokens, int index, int pointer, string s)
+{
+    if(pointer >= s.Length)
+        return false;
+
+    string token = tokens[index];
+    char caracter = token[0];
+    bool multiple = token.Length > 1? true : false;
+
+    if(index == tokens.Count - 1)
+    {
+        if (multiple)
+        {        
+            if(caracter == '.')
+                return true;
+            else
+            {
+                for(int i = pointer; i < s.Length; i++)
+                {
+                    if(caracter != s[i])
+                        return false;
+                }
+                return true;
+            }
+        
+        }
+        else
+        {
+            if(caracter == '.')
+            {
+                if(pointer == s.Length - 1)
+                    return true;
+                else return false;
+            }
+            else
+            {
+                if(pointer == s.Length - 1 && caracter == s[pointer])
+                    return true;
+                else return false;
+            }
+        }
+    }
+    else
+    {
+        if (multiple)
+        {
+
+            List<char> ranges = new List<char>();
+            char letter = s[pointer];
+            char nextToken = '\t';
+            int track = 0;
+            
+
+            for (int i = index; i < tokens.Count; i++)
+            {
+                if(tokens[i].Length == 2)
+                    ranges.Add(tokens[i][0]);
+                else
+                {
+                    nextToken = tokens[i][0];
+                    break;
+                }
+            }
+            if(nextToken != '\t')
+            {
+                for(int i = 0; i < ranges.Count; i++)
+                {
+                    if(ranges[i] == letter || ranges[i] == '.')
+                    {
+                        for(int j = pointer; j < s.Length; j++)
+                        {
+                            if(s[j] == ranges[i] || ranges[i] == '.')
+                                track++;
+                            else 
+                                break;
+                        }
+
+                        for (int j = 0; j <= track; j++)
+                        {
+                            if(MatchToken(tokens, index+i+1, pointer+j, s))
+                                return true;
+                        }
+                    }
+                }
+                return MatchToken(tokens, index+1, pointer, s);
+            }
+            else
+            {
+                for(int i = 0; i < ranges.Count; i++)
+                {
+                    for(int j = pointer; j < s.Length; j=pointer)
+                    {                        
+                        if(s[j] == ranges[i] || ranges[i] == '.')
+                            pointer++;
+                        else break;
+                    }
+                }
+                if(pointer < s.Length)
+                    return false;
+                return true;
+            }
+        }
+        else
+        {
+            if(caracter == '.')
+            {
+                if(pointer == s[s.Length -1])
+                    return false;
+                return MatchToken(tokens, index+1, pointer+1, s); 
+            }
+            else
+            {
+                if(s[pointer] == caracter)
+                    return MatchToken(tokens, index+1, pointer+1, s);
+                return false;
+            }
+        }
+    }
+}
+
+
+/*
+    Next
+*/

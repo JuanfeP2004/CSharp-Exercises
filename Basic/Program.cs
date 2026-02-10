@@ -47,6 +47,11 @@ try
     int example8 = 1994;
     string result8 = IntToRoman(example8);
     Console.WriteLine($"The roman number is {result8}");
+
+    Console.WriteLine("Problem #9: Roman number to integer");
+    string example9 = "III";
+    int result9 = RomanToInt(example9);
+    Console.WriteLine($"The integer is {result9}"); 
 }
 catch(Exception e)
 {
@@ -586,6 +591,94 @@ string TokenizeRoman(int number)
         return romanNumber;
     else
         return $"{romanNumber}{TokenizeRoman(number)}";
+}
+
+/*
+    Problem #9: Roman number to integer
+    (https://leetcode.com/problems/roman-to-integer/)
+    Given a roman numeral, convert it to an integer.
+*/
+int RomanToInt(string number)
+{
+    List<char> tokens = new List<char>(){'I','V','X','L','C','D','M'};
+    bool notFound = true;
+
+    if(number.Length < 1 || number.Length > 15)
+        throw new Exception("Number is too long or too short");
+
+    foreach(char i in number){
+        notFound = true;
+        foreach(char j in tokens)
+            if(i == j) notFound = false;
+        if(notFound)
+            throw new Exception("Symbol not found in the numeric system");
+    }
+
+    int result = 0;
+    for (int i = 0; i < number.Length; i++)
+    {
+        switch (number[i])
+        {
+            case 'I':
+                if(i != number.Length -1) {
+                    if(number[i+1] == 'V'){
+                        result += 4;
+                        i++;
+                        break;
+                    }
+                    else if(number[i+1] == 'X'){
+                        result += 9;
+                        i++;
+                        break;
+                    }
+                }              
+                result += 1;
+                break;
+            case 'V':
+                result += 5;
+                break;
+            case 'X':
+                if(i != number.Length -1){
+                    if(number[i+1] == 'L'){
+                        result += 40;
+                        i++;
+                        break;
+                    }
+                    else if(number[i+1] == 'C'){
+                        result += 90;
+                        i++;
+                        break;
+                    }
+                }
+                result += 10;
+                break;
+            case 'L':
+                result += 50;
+                break;
+            case 'C':
+                if(i != number.Length -1){
+                    if(number[i+1] == 'D'){
+                        result += 400;
+                        i++;
+                        break;
+                    }
+                    else if(number[i+1] == 'M'){
+                        result += 900;
+                        i++;
+                        break;
+                    }
+                }
+                result += 100;
+                break;
+            case 'D':
+                result += 500;
+                break;
+            case 'M':
+                result += 1000;
+                break;   
+        }
+    }
+    return result;
 }
 /*
     Next

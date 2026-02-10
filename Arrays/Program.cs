@@ -21,18 +21,26 @@ try
     int[] example3 = [1,1];
     int result3 = MaxArea(example3);
     Console.WriteLine($"The max area of the heights is: {result3}");
+
+    Console.WriteLine("Problem #4: Longest common prefix");
+    string[] example4 = ["dog", "doggy", "doge"];
+    string result4 = LongestCommonPrefix(example4);
+    Console.WriteLine($"The longest prefix is {result4}");
 }
 catch(Exception e)
 {
     Console.WriteLine(e.Message);
 }
 
-/*Problem #1: Two Sum 
-(https://leetcode.com/problems/two-sum/description/)
-Given an array of integers nums and an integer target, return indices of 
-the two numbers such that they add up to target.
-You may assume that each input would have exactly one solution, and you may not use the same element twice.
-You can return the answer in any order.*/
+/*
+    Problem #1: Two Sum 
+    (https://leetcode.com/problems/two-sum/)
+    Given an array of integers nums and an integer target, return indices of 
+    the two numbers such that they add up to target.
+    You may assume that each input would have exactly one solution, and you may 
+    not use the same element twice.
+    You can return the answer in any order.
+*/
 static int[] TwoSum(int[] nums, int target)
 {
     // Constraints
@@ -59,11 +67,12 @@ static int[] TwoSum(int[] nums, int target)
     throw new Exception("Couldn't find any pair");
 }
 
-/*Problem #2: Median of two sorted Arrays 
-(https://leetcode.com/problems/median-of-two-sorted-arrays/)
-Given two sorted arrays nums1 and nums2 of size m and n respectively, return 
-the median of the two sorted arrays.
-Solution in O(m+n)
+/*
+    Problem #2: Median of two sorted Arrays 
+    (https://leetcode.com/problems/median-of-two-sorted-arrays/)
+    Given two sorted arrays nums1 and nums2 of size m and n respectively, 
+    return the median of the two sorted arrays.
+    Solution in O(m+n)
 */
 static double FindMedianSortedArrays(int[] numsA, int[] numsB)
 {
@@ -115,16 +124,16 @@ static double FindMedianSortedArrays(int[] numsA, int[] numsB)
     }
 }
 
-/*Problem #3: Max area of two heights
-(https://leetcode.com/problems/container-with-most-water/)
-You are given an integer array height of length n. There are n vertical lines 
-drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
-
-Find two lines that together with the x-axis form a container, such that the container contains the most water.
-
-Return the maximum amount of water a container can store.
-
-Notice that you may not slant the container.
+/*
+    Problem #3: Max area of two heights
+    (https://leetcode.com/problems/container-with-most-water/)
+    You are given an integer array height of length n. There are n vertical 
+    lines drawn such that the two endpoints of the ith line are (i, 0) and 
+    (i, height[i]).
+    Find two lines that together with the x-axis form a container, such that 
+    the container contains the most water.
+    Return the maximum amount of water a container can store.
+    Notice that you may not slant the container.
 */
 static int MaxArea(int[] heights)
 {
@@ -148,4 +157,46 @@ static int MaxArea(int[] heights)
     }
 
     return maxArea;
+}
+
+/*
+    Problem #4: Find the longest common substring
+    (https://leetcode.com/problems/longest-common-prefix/)
+    Write a function to find the longest common prefix string amongst an array 
+    of strings.
+    If there is no common prefix, return an empty string "".
+*/
+static string LongestCommonPrefix(string[] strings)
+{
+    if(strings.Length < 1 || strings.Length > 200)
+        throw new Exception("There are 0 strings or many strings");
+
+    string prefix = "";
+    int shortestString = int.MaxValue;
+
+    for (int i = 0; i < strings.Length; i++)
+    {
+        if(strings[i].Length < shortestString)
+            shortestString = strings[i].Length;
+        else if (strings[i].Length < 0 || strings[i].Length > 200)
+            throw new Exception("One of the strings is too short or too long");
+    }
+
+    char caracter = ' ';
+
+    for (int i = 0; i < shortestString; i++)
+    {
+        for (int j = 0; j < strings.Length; j++)
+        {
+            if(j == 0)
+                caracter = strings[0][i];
+            else
+                if(strings[j][i] != caracter)
+                {
+                    return prefix;
+                }
+        }
+        prefix += strings[0][i];
+    }
+    return prefix;
 }

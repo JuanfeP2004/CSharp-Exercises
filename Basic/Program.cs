@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 
-using System.ComponentModel;
+using System.Formats.Asn1;
 
 try
 {
@@ -42,6 +42,11 @@ try
     string exampel7_2 = "a*a";
     bool result7 = IsMatch(example7_1, exampel7_2);
     Console.WriteLine($"The expresion is {result7}");
+
+    Console.WriteLine("Problem #8: Integer to roman");
+    int example8 = 1994;
+    string result8 = IntToRoman(example8);
+    Console.WriteLine($"The roman number is {result8}");
 }
 catch(Exception e)
 {
@@ -382,7 +387,6 @@ bool IsMatch(string s, string p)
     //Second step: view if the expression match
     return MatchToken(tokens, 0, 0, s);
 }
-
 bool MatchToken(List<string> tokens, int index, int pointer, string s)
 {
     if(pointer >= s.Length)
@@ -503,7 +507,86 @@ bool MatchToken(List<string> tokens, int index, int pointer, string s)
     }
 }
 
+/*
+    Problem #8: Integer to roman number
+    (https://leetcode.com/problems/integer-to-roman/)
+    Given an integer, convert it to a Roman numeral.
+*/
+string IntToRoman(int number)
+{
+    if(number < 1 || number > 3999)
+        throw new Exception("Number not supported");
 
+    else return TokenizeRoman(number);
+}
+string TokenizeRoman(int number)
+{
+    int digits;
+    if(number % 10 == 0)
+        digits = (int)Math.Log10(number) +1;
+    else if(number != 1)
+        digits = (int)Math.Ceiling(Math.Log10(number));
+    else 
+        digits = 1;
+    int repetitions = (int)(number / Math.Pow(10,digits-1));
+    string romanNumber = "";
+
+    if(repetitions == 4 || repetitions == 9)
+    {
+        if(number < 10)
+            return $"I{TokenizeRoman(number+1)}";
+        else if(number < 100)
+            return $"X{TokenizeRoman(number+10)}";
+        else
+            return $"C{TokenizeRoman(number+100)}";
+    }
+    if(repetitions >= 5)
+    {
+        if(number < 50)
+            return $"V{TokenizeRoman(number-5)}";
+        else if(number < 500)
+            return $"L{TokenizeRoman(number-50)}";
+        else
+            return $"D{TokenizeRoman(number-500)}";
+    }
+    
+    switch (digits)
+    {
+        case 4:                       
+            for(int j = repetitions; j > 0; j--)
+            {
+                romanNumber += "M";
+                number -= 1000;
+            } 
+            break;
+        case 3:
+            for(int j = repetitions; j > 0; j--)
+            {
+                romanNumber += "C";
+                number -= 100;
+            }
+            break;
+        case 2:
+            for(int j = repetitions; j > 0; j--)
+            {
+                romanNumber += "X";
+                number -= 10;
+            }
+            break;
+        case 1:
+            for(int j = repetitions; j > 0; j--)
+            {
+                romanNumber += "I";
+                number--;
+            }
+            break;
+    }
+
+    if(number == 0)
+        return romanNumber;
+    else
+        return $"{romanNumber}{TokenizeRoman(number)}";
+}
 /*
     Next
 */

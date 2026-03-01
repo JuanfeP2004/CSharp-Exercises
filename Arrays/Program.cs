@@ -26,6 +26,19 @@ try
     string[] example4 = ["dog", "doggy", "doge"];
     string result4 = LongestCommonPrefix(example4);
     Console.WriteLine($"The longest prefix is {result4}");
+
+    Console.WriteLine("Problem #5: 3 Sum");
+    int[] example5 = [0,0,0];
+    List<int[]> result5 = ThreeSum(example5);
+    if(result5.Count == 0)
+        Console.WriteLine("[]");
+    foreach(int[] item in result5)
+    {
+        Console.Write("[");
+        foreach(int x in item)
+            Console.Write($"{x},");
+        Console.Write("] ");
+    }
 }
 catch(Exception e)
 {
@@ -199,4 +212,56 @@ static string LongestCommonPrefix(string[] strings)
         prefix += strings[0][i];
     }
     return prefix;
+}
+
+/*
+    Problem #5: 3 Sum
+    (https://leetcode.com/problems/3sum/)
+    Given an integer array nums, return all the triplets [nums[i], nums[j], 
+    nums[k]] such that i != j, i != k, and j != k, 
+    and nums[i] + nums[j] + nums[k] == 0.
+    Notice that the solution set must not contain duplicate triplets.
+*/
+static List<int[]> ThreeSum(int[] numbers)
+{
+    if(numbers.Length < 3 || numbers.Length > 3000)
+        throw new Exception("Numbers vector too short or too long");
+    foreach(int item in numbers)
+        if(item < Math.Pow(-10,5) || item > Math.Pow(10,5))
+            throw new Exception("An item is too small or too big");
+
+    List<int[]> triplets = new List<int[]>();
+    for(int i = 0; i < numbers.Length - 2; i++)
+    {
+        for(int j = i+1; j < numbers.Length - 1; j++)
+        {
+            for(int k = j+1; k < numbers.Length; k++)
+            {
+                if(numbers[i] + numbers[j] + numbers[k] == 0){
+                    
+                    int min, max, mid;
+                    if(triplets.Count == 0)
+                    {
+                        min = Math.Min(Math.Min(numbers[i], numbers[j]), numbers[k]);
+                        max = Math.Max(Math.Max(numbers[i], numbers[j]), numbers[k]);
+                        triplets.Add([min,-min-max,max]);
+                        break;  
+                    }
+                    foreach(int[] item in triplets)
+                    {
+                        min = Math.Min(Math.Min(numbers[i], numbers[j]), numbers[k]);
+                        max = Math.Max(Math.Max(numbers[i], numbers[j]), numbers[k]);
+                        mid = -min -max;
+                        if(item[0] == min && item[1] == mid &&
+                        item[2] == max)
+                            break;
+                        triplets.Add([min,mid,max]);
+                        break;
+                    }                
+                }
+            }
+        }
+    }
+
+    return triplets;
 }

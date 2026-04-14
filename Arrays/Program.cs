@@ -39,6 +39,14 @@ try
             Console.Write($"{x},");
         Console.Write("] ");
     }
+    Console.WriteLine();
+
+    Console.WriteLine("Problem #6: 3 Sum closest");
+    int[] example6 = [0,0,0];
+    int example6_1 = 1;
+    int result6 = ThreeSumClosest(example6, example6_1);
+    Console.WriteLine($"The sum is: {result6}");
+
 }
 catch(Exception e)
 {
@@ -264,4 +272,42 @@ static List<int[]> ThreeSum(int[] numbers)
     }
 
     return triplets;
+}
+
+/*
+    Problem #6: Closest 3 sum
+    (https://leetcode.com/problems/3sum-closest/)
+    Given an integer array nums of length n and an integer target, find three integers at distinct 
+    indices in nums such that the sum is closest to target.
+    Return the sum of the three integers.
+    You may assume that each input would have exactly one solution.
+*/
+static int ThreeSumClosest(int[] closest, int tarjet)
+{
+    if(closest.Length < 3 || closest.Length > 3000)
+        throw new Exception("Numbers vector too short or too long");
+    if(tarjet < Math.Pow(-10,4) || tarjet > Math.Pow(10,4))
+    foreach(int item in closest)
+        if(item < Math.Pow(-10,3) || item > Math.Pow(10,3))
+            throw new Exception("An item is too small or too big");
+
+    int result = 0;
+    int sum = 0;
+    int closest_difference = int.MaxValue;
+    for(int i = 0; i < closest.Length - 2; i++)
+    {
+        for(int j = i+1; j < closest.Length - 1; j++)
+        {
+            for(int k = j+1; k < closest.Length; k++)
+            {
+                sum = closest[i] + closest[j] + closest[k];
+
+                if(Math.Abs(tarjet - sum) < closest_difference){
+                    result = sum;
+                    closest_difference = tarjet - sum;
+                }
+            }
+        }
+    }
+    return result;
 }
